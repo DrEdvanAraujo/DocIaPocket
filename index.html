@@ -1,0 +1,555 @@
+	<!DOCTYPE html>
+	
+	<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>DocIaPocket</title>
+		<!-- Tailwind CSS via CDN -->
+		<script src="https://cdn.tailwindcss.com"></script>
+		<!-- Lucide Icons -->
+		<script src="https://unpkg.com/lucide@latest"></script>
+		<!-- Custom styles -->
+		<style>
+			.scrollbar-custom::-webkit-scrollbar {
+				width: 6px;
+			}
+			.scrollbar-custom::-webkit-scrollbar-track {
+				background: transparent;
+			}
+			.scrollbar-custom::-webkit-scrollbar-thumb {
+				background-color: rgba(0, 0, 0, 0.2);
+				border-radius: 3px;
+			}
+			.dark .scrollbar-custom::-webkit-scrollbar-thumb {
+				background-color: rgba(255, 255, 255, 0.2);
+			}
+		</style>
+	</head>
+	<body class="bg-white dark:bg-gray-900">
+		<!-- Layout principal -->
+		<div class="grid h-screen w-screen grid-cols-1 grid-rows-[auto,1fr] overflow-hidden text-smd md:grid-cols-[280px,1fr] transition-[300ms] [transition-property:grid-template-columns] dark:text-gray-300 md:grid-rows-[1fr]">
+			<!-- Sidebar -->
+			<nav class="grid max-h-screen grid-cols-1 grid-rows-[auto,1fr,auto] overflow-hidden *:w-[280px] max-md:hidden">
+				<div class="sticky top-0 flex flex-none flex-col items-start justify-between px-3 py-3.5">
+	  <span class="flex items-center rounded-xl text-lg font-semibold">
+		<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 1011 865" class="mr-1">
+			<!-- SVG path do logo aqui -->
+		</svg>
+	  DocIaPocket
+	  </span>
+
+	  <button onclick="newChat()" class="my-4 flex items-center gap-2 rounded-full bg-black px-4 py-2 text-white hover:bg-gray-800">
+		 &nbsp&nbsp Nova Conversa&nbsp&nbsp
+	  </button>
+
+	  <!-- Campo de entrada de e-mail -->
+	  <div class="w-full my-2">
+		  <label for="user-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Seu E-mail:</label>
+		  <input type="email" id="user-email" name="user-email" placeholder="Digite seu e-mail" required
+			  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300">
+				  <button id="confirm-email-btn"
+		class="mt-2 px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded">
+		Confirmar E-mail
+		
+	  </button>
+  
+  
+  
+	  </div>
+
+	</div>
+	
+
+				<div class="scrollbar-custom flex flex-col gap-1 overflow-y-auto rounded-r-xl from-gray-50 px-3 pb-3 pt-2 text-[.9rem] dark:from-gray-800/30">
+					<!-- Lista de conversas anteriores aqui -->
+				</div>
+
+				<div class="mt-0.5 flex flex-col gap-1 rounded-r-xl p-3 text-sm md:bg-gradient-to-l md:from-gray-50 md:dark:from-gray-800/30">
+		<button id="theme-button" class="flex w-full items-center justify-start rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
+			<i data-lucide="sun" class="mr-2 h-4 w-4"></i>
+			Teleconsulta
+		</button>
+		<button id="btnAssistentes" class="flex w-full items-center justify-start rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
+		Outras Medicinas
+	</button>
+
+	<script>
+		document.getElementById("btnAssistentes").addEventListener("click", function () {
+			window.location.href = "assistentes.html";
+		});
+	</script>
+			
+		<button id="btnFerramentas" class="flex w-full items-center justify-start rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
+		Educação em Saúde
+		<span class="ml-auto rounded-full border border-purple-300 px-2 py-0.5 text-xs text-purple-500 dark:border-purple-500 dark:text-purple-400">
+			Novo
+		</span>
+	</button>
+
+	<script>
+		document.getElementById("btnFerramentas").addEventListener("click", function () {
+			window.location.href = "https://edaraujofilho.criadorlw.com.br/"; // Redireciona para a página de ferramentas
+		});
+	</script>
+
+		
+	<button id="btnConfiguracoes" class="flex w-full items-center justify-start rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
+    Avatar
+</button>
+
+<script>
+    document.getElementById("btnConfiguracoes").addEventListener("click", function() {
+        const url = "https://labs.heygen.com/interactive-avatar/share?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiI1MTk2OTFiNmJjZDE0NWZmYjZjOTY3NjM1%0D%0AYzQyNjY4YSIsInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3Yz%0D%0ALzUxOTY5MWI2YmNkMTQ1ZmZiNmM5Njc2MzVjNDI2NjhhL2Z1bGwvMi4yL3ByZXZpZXdfdGFyZ2V0%0D%0ALndlYnAiLCJuZWVkUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6IjA5%0D%0AZGFmNjhkMDRlNDQzMzM4ODNiODg3ODhmOTM5MDVlIiwic2hhcmVfY29kZSI6IjliNTgzZmIyLWRm%0D%0AMDQtNDc5OC05MzJlLTBhZGExMDM0N2Q4ZSIsInVzZXJuYW1lIjoiNzIwMDdlNGUwNDNhNGRkNGI2%0D%0AZDRhMDhlYWJmZWE4NzUifQ%3D%3D";
+        const popup = window.open(url, "avatarPopup", "width=1024,height=768,top=100,left=100,resizable=yes,scrollbars=yes");
+        if (!popup) {
+            alert("Permita pop-ups para abrir o Avatar Interativo.");
+        }
+    });
+</script>
+
+				</div>
+			</nav>
+			
+			<!-- Área principal do chat -->
+			<div id="content" class="flex-1 overflow-y-auto p-4 space-y-4">
+			<div class="flex h-full flex-col">
+				<div class="flex-1 overflow-y-auto p-4 space-y-4" id="chat-messages">
+					<!-- Mensagens do chat serão inseridas aqui -->
+				</div>
+<!-- Sugestões pré-prontas acima da caixa de digitação -->
+<div class="flex flex-wrap gap-2 pt-3 px-4 bg-gray-50 dark:bg-gray-800">
+    <button class="suggestion-btn rounded-lg bg-gray-200 dark:bg-gray-700 px-3 py-1 hover:bg-gray-300 dark:hover:bg-gray-600">
+        Serviços em saúde disponíveis
+    </button>
+    <button class="suggestion-btn rounded-lg bg-gray-200 dark:bg-gray-700 px-3 py-1 hover:bg-gray-300 dark:hover:bg-gray-600">
+        Como realizar consulta online? (Com pré consulta)
+    </button>
+    <button class="suggestion-btn rounded-lg bg-gray-200 dark:bg-gray-700 px-3 py-1 hover:bg-gray-300 dark:hover:bg-gray-600">
+        Agendamento Tele/Presencial
+    </button>
+	<button class="suggestion-btn rounded-lg bg-gray-200 dark:bg-gray-700 px-3 py-1 hover:bg-gray-300 dark:hover:bg-gray-600">
+        Como usar o Avatar
+    </button>
+</div>
+
+<script>
+    document.querySelectorAll('.suggestion-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const message = this.textContent;
+            document.getElementById('message-input').value = message;
+            document.getElementById('chat-form').dispatchEvent(new Event('submit'));
+        });
+    });
+</script>
+
+				<!-- Formulário de envio de mensagens -->
+	<form id="chat-form" class="border-t p-4" enctype="multipart/form-data">
+		<div class="flex gap-2">
+			<!-- Input de mensagem -->
+			<textarea
+				id="message-input"
+				placeholder="Digite sua mensagem..."
+				class="min-h-[50px] resize-none w-full rounded-lg border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-800"
+			></textarea>
+			
+			<!-- Botão azul para abrir formulário pop-up -->
+<button type="button"
+    onclick="openUploadForm()"
+    class="flex items-center justify-center rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600">
+    <i data-lucide="paperclip" class="h-4 w-4"></i>
+</button>
+
+<script>
+    function openUploadForm() {
+        const url = "https://docs.google.com/forms/d/e/1FAIpQLSfNPQmqpqZykoZ6S6me3f37i1rEDsMae0GOQ-uFGhzPf8P8bA/viewform?usp=header";
+        const popup = window.open(url, "uploadForm", "width=1024,height=768,resizable=yes,scrollbars=yes");
+        if (!popup) {
+            alert("Permita pop-ups para acessar o formulário.");
+        }
+    }
+</script>
+
+			
+			<!-- Botão de envio -->
+			<button type="submit" class="rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600">
+				<i data-lucide="send" class="h-4 w-4"></i>
+			</button>
+		</div>
+	</form>
+	<script>
+		document.getElementById('file-upload').addEventListener('change', function(event) {
+			const fileNameSpan = document.getElementById('file-name');
+			const file = event.target.files[0];
+			if (file) {
+				fileNameSpan.textContent = file.name;
+			} else {
+				fileNameSpan.textContent = '';
+			}
+		});
+	</script>
+
+	<script>
+		document.getElementById('chat-form').addEventListener('submit', async function(event) {
+			event.preventDefault();
+
+			const message = document.getElementById('message-input').value.trim();
+			const fileInput = document.getElementById('file-upload');
+
+			if (!message && !fileInput.files.length) {
+				alert('Digite uma mensagem ou selecione um arquivo para enviar.');
+				return;
+			}
+
+			const formData = new FormData();
+			formData.append('message', message);
+			if (fileInput.files.length > 0) {
+				formData.append('file', fileInput.files[0]);
+			}
+
+			try {
+				const response = await fetch('http://localhost:8000/send-email', { // Altere para a URL do backend
+					method: 'POST',
+					body: formData
+				});
+
+				if (!response.ok) {
+					throw new Error(`Erro HTTP: ${response.status}`);
+				}
+
+				alert('Mensagem enviada com sucesso!');
+				document.getElementById('message-input').value = '';
+				fileInput.value = '';
+			} catch (error) {
+				console.error('Erro ao enviar:', error);
+				alert('Erro ao enviar a mensagem. Tente novamente.');
+			}
+		});
+	</script>
+
+			</div>
+		</div>
+
+	<!-- Botão para abrir o pop-up da Pré-Consulta -->
+	<button onclick="openPopup()" class="absolute bottom-28 right-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full px-4 py-2 shadow-lg z-50">
+	  Pré-Consulta
+	</button>
+
+	<!-- Script para abrir o pop-up -->
+	<script>
+	  function openPopup() {
+		const url = "https://notebooklm.google.com/notebook/7d936bec-60ff-4a82-b3e9-e8ca531ffb45";
+		const popup = window.open(url, "notebookLM", "width=1024,height=768,top=100,left=100,resizable=yes,scrollbars=yes");
+		if (!popup) {
+		  alert("Permita pop-ups para abrir o NotebookLM.");
+		}
+	  }
+	</script>
+
+
+
+
+	<script>
+	  function openOverlay() {
+		document.getElementById('notebook-overlay').classList.remove('hidden');
+	  }
+
+	  function closeOverlay() {
+		document.getElementById('notebook-overlay').classList.add('hidden');
+	  }
+	</script>
+
+	<script>
+	  function openOverlay() {
+		document.getElementById('notebook-overlay').classList.remove('hidden');
+	  }
+
+	  function closeOverlay() {
+		document.getElementById('notebook-overlay').classList.add('hidden');
+	  }
+	</script>
+	   
+
+	<script>
+		function handleLogin(event) {
+			event.preventDefault();
+			const tribunalSelecionado = document.getElementById("tribunal").value;
+			if (tribunalSelecionado === "") {
+				alert("Por favor, selecione um tribunal.");
+				return;
+			}
+			
+			console.log("Tribunal selecionado:", tribunalSelecionado);
+			fecharModal();
+		}
+
+		function fecharModal() {
+			document.getElementById("login-modal").style.display = "none";
+		}
+
+		// Exibir automaticamente o modal ao carregar a página
+		window.onload = function() {
+			document.getElementById("login-modal").style.display = "flex";
+		};
+	</script>
+
+
+		<script>
+    // Inicializar ícones Lucide
+    lucide.createIcons();
+
+    // Elementos do chat
+    const chatMessages = document.getElementById('chat-messages');
+    const messageForm = document.getElementById('chat-form');
+    const textarea = document.getElementById('message-input');
+
+    // Adiciona envio ao pressionar Enter (sem shift)
+    textarea.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Impede quebra de linha
+            messageForm.dispatchEvent(new Event('submit')); // Dispara o envio
+        }
+    });
+
+    // Configuração da API Groq
+    const GROQ_API_KEY = "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"; // Substitua pela sua chave de API da Groq
+    const GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
+
+    // Evento de envio do formulário
+    messageForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const message = textarea.value.trim();
+    if (!message) return;
+
+    addMessage(message, 'user');
+    textarea.value = '';
+
+    // Adiciona mensagem temporária de "..."
+    const thinkingMessage = addMessage('...', 'assistant');
+
+    try {
+        const response = await fetch(GROQ_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${GROQ_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: "llama-3.3-70b-versatile",
+                messages: [
+                    { role: "system", content: "Você é um assistente que responde exclusivamente em português." },
+                    { role: "user", content: message }
+                ],
+                temperature: 0.5,
+                max_tokens: 1024,
+                top_p: 1,
+                stream: false,
+                stop: null
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Remove os pontinhos e atualiza com a resposta real
+        if (data && data.choices && data.choices.length > 0) {
+            thinkingMessage.textContent = data.choices[0].message.content;
+        } else {
+            thinkingMessage.textContent = 'Erro na resposta da IA.';
+        }
+    } catch (error) {
+        console.error("Erro ao conectar com a API Groq:", error);
+        thinkingMessage.textContent = 'Erro ao conectar com a API.';
+    }
+});
+
+// Ajuste da função addMessage para retornar o elemento criado
+function addMessage(content, role) {
+    const div = document.createElement('div');
+    div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `rounded-lg px-4 py-2 max-w-[80%] ${
+        role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-800'
+    }`;
+    messageDiv.textContent = content;
+
+    div.appendChild(messageDiv);
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    return messageDiv; // Retorna o elemento criado para permitir atualizações posteriores
+}
+
+
+    function newChat() {
+        // Limpa as mensagens do chat
+        document.getElementById('chat-messages').innerHTML = '';
+
+        // Opcional: Foca novamente no campo de mensagem
+        document.getElementById('message-input').focus();
+    }
+</script>
+
+
+	</body>
+	<script>
+// Modificações na seção do botão de e-mail no HTML
+document.getElementById('confirm-email-btn').addEventListener('click', async () => {
+    const email = document.getElementById('user-email').value.trim();
+    if (!email || !isValidEmail(email)) {
+        alert('Digite um e-mail válido.');
+        return;
+    }
+    
+    try {
+        // Verificar se o e-mail já existe
+        const response = await fetch('http://localhost:8000/check-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            if (data.exists) {
+                // E-mail já registrado, mostrar informações do usuário
+                showUserProfile(data.user);
+            } else {
+                // E-mail novo, registrar no sistema
+                const registerResponse = await fetch('http://localhost:8000/register-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        email,
+                        fichas: 0,
+                        dataRegistro: new Date().toISOString()
+                    })
+                });
+                
+                const registerData = await registerResponse.json();
+                
+                if (registerResponse.ok && registerData.status === "success") {
+                    alert(`E-mail registrado com sucesso!`);
+                    showUserProfile({ email, fichas: 0 });
+                } else {
+                    alert(`Erro ao registrar e-mail: ${registerData.message || 'Erro desconhecido'}`);
+                }
+            }
+        } else {
+            alert(`Erro na verificação: ${data.message || 'Erro desconhecido'}`);
+        }
+    } catch (error) {
+        console.error('Erro na operação:', error);
+        alert('Erro de conexão. Verifique sua internet e tente novamente.');
+    }
+});
+
+// Função para mostrar o perfil do usuário e suas fichas
+function showUserProfile(user) {
+    // Verificar se o container de perfil já existe, se não, criar
+    let profileContainer = document.getElementById('user-profile-container');
+    
+    if (!profileContainer) {
+        profileContainer = document.createElement('div');
+        profileContainer.id = 'user-profile-container';
+        profileContainer.className = 'mt-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg';
+        
+        // Inserir após o botão de confirmar
+        const emailSection = document.getElementById('confirm-email-btn').parentNode;
+        emailSection.appendChild(profileContainer);
+    }
+    
+    // Preencher com os dados do usuário
+    profileContainer.innerHTML = `
+        <div class="text-sm">
+            <div class="font-semibold">Usuário: ${user.email}</div>
+            <div class="flex items-center mt-2">
+                <span class="mr-2">Fichas disponíveis:</span>
+                <span class="bg-green-500 text-white px-2 py-1 rounded-full font-bold">${user.fichas}</span>
+            </div>
+            <div class="mt-2">
+                <button id="buy-tokens-btn" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded">
+                    Comprar Fichas
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Adicionar evento para o botão de compra
+    document.getElementById('buy-tokens-btn').addEventListener('click', () => {
+        openMercadoPagoCheckout(user.email);
+    });
+}
+
+// Função para validar e-mail
+function isValidEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// Função para abrir checkout do Mercado Pago
+function openMercadoPagoCheckout(email) {
+    // Redirecionar para a página de checkout ou abrir modal
+    fetch('http://localhost:8000/create-payment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            email,
+            product: 'ficha',
+            quantity: 1
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.checkoutUrl) {
+            window.open(data.checkoutUrl, '_blank');
+        } else {
+            alert('Erro ao criar pagamento.');
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao criar pagamento:', error);
+        alert('Erro ao processar pagamento. Tente novamente.');
+    });
+}
+
+// Função para usar uma ficha (quando necessário)
+function useToken(email) {
+    return fetch('http://localhost:8000/use-token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Atualizar a exibição de fichas
+            const tokenDisplay = document.querySelector('#user-profile-container .bg-green-500');
+            if (tokenDisplay) {
+                tokenDisplay.textContent = data.remainingTokens;
+            }
+            return true;
+        } else {
+            alert('Erro: ' + (data.message || 'Fichas insuficientes'));
+            return false;
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao usar ficha:', error);
+        alert('Erro ao processar sua solicitação.');
+        return false;
+    });
+}
