@@ -133,7 +133,7 @@ app.post('/create-payment', async (req, res) => {
     description: 'Crédito para uso no DocIaPocket',
     quantity: parseInt(quantity),
     currency_id: 'BRL',
-    unit_price: 10.00 // Valor em reais
+    unit_price: 50.00 // Valor em reais
   }];
   
   try {
