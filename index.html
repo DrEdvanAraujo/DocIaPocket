@@ -129,23 +129,41 @@ function showUserProfile(user) {
                 <span class="mr-2">Fichas disponíveis:</span>
                 <span class="bg-green-500 text-white px-2 py-1 rounded-full font-bold">${user.fichas}</span>
             </div>
-            <div class="mt-2">
+            <div class="mt-2 flex gap-2">
                 <button id="buy-tokens-btn" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded">
                     Comprar Fichas
                 </button>
-				
+                <button id="logout-btn" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded">
+                    Sair
+                </button>
             </div>
         </div>
     `;
-    
+
+    // Agora adicionando corretamente o evento do botão comprar
     document.getElementById('buy-tokens-btn').addEventListener('click', () => {
-        openMercadoPagoCheckout(user.email);
+        window.open('https://mpago.la/2YFeiBN', '_blank');
     });
-    
-    // Desabilitar input e botão após confirmação
+
+    // Evento botão Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        container.classList.add('hidden');
+
+        const emailInput = document.getElementById('user-email');
+        const confirmButton = document.getElementById('confirm-email-btn');
+
+        emailInput.disabled = false;
+        emailInput.value = '';
+        confirmButton.style.display = 'block';
+        container.innerHTML = '';
+
+        alert('Logout realizado com sucesso!');
+    });
+
     document.getElementById('user-email').disabled = true;
     document.getElementById('confirm-email-btn').style.display = 'none';
 }
+
 
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -576,10 +594,11 @@ function showUserProfile(user) {
         </div>
     `;
     
-    // Adicionar evento para o botão de compra
-    document.getElementById('buy-tokens-btn').addEventListener('click', () => {
-        openMercadoPagoCheckout(user.email);
-    });
+    // Adicionar evento para o botão de compra diretamente pelo link do MercadoPago
+document.getElementById('buy-tokens-btn').addEventListener('click', () => {
+    window.open('https://mpago.la/2YFeiBN', '_blank');
+});
+
 }
 
 // Função para validar e-mail
@@ -644,4 +663,22 @@ function useToken(email) {
         alert('Erro ao processar sua solicitação.');
         return false;
     });
+}
+// Evento botão Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        profileContainer.classList.add('hidden');
+        
+        const emailInput = document.getElementById('user-email');
+        const confirmButton = document.getElementById('confirm-email-btn');
+        
+        emailInput.disabled = false;
+        emailInput.value = '';
+        confirmButton.style.display = 'block';
+        profileContainer.innerHTML = '';
+
+        alert('Logout realizado com sucesso!');
+    });
+    
+    document.getElementById('user-email').disabled = true;
+    document.getElementById('confirm-email-btn').style.display = 'none';
 }
