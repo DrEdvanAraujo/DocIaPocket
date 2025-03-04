@@ -245,11 +245,39 @@ function isValidEmail(email) {
 
 <script>
     document.querySelectorAll('.suggestion-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const message = this.textContent;
-            document.getElementById('message-input').value = message;
-            document.getElementById('chat-form').dispatchEvent(new Event('submit'));
-        });
+    btn.addEventListener('click', function() {
+        const message = this.textContent.trim();
+        let response = '';
+
+        switch (message) {
+            case 'Serviços em saúde disponíveis':
+                response = `Pela plataforma é possível realizar alguns serviços tanto assíncronos como telepresenciais, além de poder agendar encontros presenciais.\nAqui você pode:\n- Realizar renovação de receita médica;\n- Realizar consulta online assíncrona (não ao vivo);\n- Agendar encontros presenciais;\n- Agendar sessões de Acupuntura;\n- Agendar sessões de Práticas Tradicionais Indígenas;`;
+                break;
+
+            case 'Como realizar consulta online? (Com pré consulta)':
+                response = `A consulta online assíncrona difere da teleconsulta, pois não é ao vivo. O paciente faz a pré-consulta através da plataforma e, após avaliação médica, recebe o retorno com as tratativas já realizadas, podendo conter anexos e recomendações médicas.`;
+                break;
+
+            case 'Agendamento Tele/Presencial':
+                response = `O Agendamento da plataforma pode ser tanto para consulta telepresencial quanto presencial. Ao clicar em Teleconsulta, o usuário é direcionado para a agenda e verifica as disponibilidades.`;
+                break;
+
+            case 'Como usar o Avatar':
+                response = `O avatar é uma ferramenta interativa que oferece informações em Português.\nSelecione a língua Portuguesa, tire suas dúvidas e aproveite a interação.`;
+                break;
+
+            default:
+                response = 'Pergunta não reconhecida.';
+        }
+
+        // Exibir pergunta no chat
+        addMessage(message, 'user');
+        // Exibir resposta pré-definida
+        addMessage(response, 'assistant');
+
+        // Limpa a caixa de input após clicar
+        document.getElementById('message-input').value = '';
+    });
     });
 </script>
 
