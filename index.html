@@ -177,9 +177,19 @@ function isValidEmail(email) {
 
 				<div class="mt-0.5 flex flex-col gap-1 rounded-r-xl p-3 text-sm md:bg-gradient-to-l md:from-gray-50 md:dark:from-gray-800/30">
 		<button id="theme-button" class="flex w-full items-center justify-start rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
-			<i data-lucide="sun" class="mr-2 h-4 w-4"></i>
-			Agendamento
-		</button>
+    <i data-lucide="sun" class="mr-2 h-4 w-4"></i>
+    Agendamento
+</button>
+
+<script>
+    document.getElementById("theme-button").addEventListener("click", function () {
+        const url = "https://calendar.app.google/HsgigYE8MXUxYP4SA";
+        const popup = window.open(url, "agendamentoPopup", "width=1024,height=768,top=100,left=100,resizable=yes,scrollbars=yes");
+        if (!popup) {
+            alert("Permita pop-ups para abrir o Agendamento.");
+        }
+    });
+</script>
 		<button id="btnAssistentes" class="flex w-full items-center justify-start rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
 		Outras Medicinas
 	</button>
