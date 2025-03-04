@@ -44,21 +44,113 @@
 	  </button>
 
 	  <!-- Campo de entrada de e-mail -->
-	  <div class="w-full my-2">
-		  <label for="user-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Seu E-mail:</label>
-		  <input type="email" id="user-email" name="user-email" placeholder="Digite seu e-mail" required
-			  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300">
-				  <button id="confirm-email-btn"
-		class="mt-2 px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded">
-		Confirmar E-mail
-		
-	  </button>
-  
-  
-  
-	  </div>
+	  <!-- Substitua a div do email existente -->
+<div class="w-full my-2">
+    <label for="user-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        Seu E-mail:
+    </label>
+    <div class="mt-1 flex flex-col gap-2">
+        <input 
+            type="email" 
+            id="user-email" 
+            name="user-email" 
+            placeholder="Digite seu e-mail" 
+            required
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 px-3 py-2"
+        >
+        <button 
+            id="confirm-email-btn"
+            class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors duration-200"
+        >
+            Confirmar E-mail
+        </button>
+    </div>
+    <div id="user-profile-container" class="hidden mt-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+</div>
 
 	</div>
+	<script>
+document.getElementById('confirm-email-btn').addEventListener('click', async () => {
+    const email = document.getElementById('user-email').value.trim();
+    if (!email || !isValidEmail(email)) {
+        alert('Digite um e-mail válido.');
+        return;
+    }
+    
+    try {
+        const response = await fetch('http://localhost:8000/check-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+        
+        if (!response.ok) throw new Error('Erro na conexão');
+        
+        const data = await response.json();
+        
+        if (data.exists) {
+            showUserProfile(data.user);
+        } else {
+            const registerResponse = await fetch('http://localhost:8000/register-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    email,
+                    fichas: 0,
+                    dataRegistro: new Date().toISOString()
+                })
+            });
+            
+            if (!registerResponse.ok) throw new Error('Erro ao registrar');
+            
+            const registerData = await registerResponse.json();
+            if (registerData.status === "success") {
+                alert('E-mail registrado com sucesso!');
+                showUserProfile({ email, fichas: 0 });
+            }
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro de conexão. Verifique se o servidor está rodando.');
+    }
+});
+
+function showUserProfile(user) {
+    const container = document.getElementById('user-profile-container');
+    container.classList.remove('hidden');
+    container.innerHTML = `
+        <div class="text-sm">
+            <div class="font-semibold">Usuário: ${user.email}</div>
+            <div class="flex items-center mt-2">
+                <span class="mr-2">Fichas disponíveis:</span>
+                <span class="bg-green-500 text-white px-2 py-1 rounded-full font-bold">${user.fichas}</span>
+            </div>
+            <div class="mt-2">
+                <button id="buy-tokens-btn" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded">
+                    Comprar Fichas
+                </button>
+				
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('buy-tokens-btn').addEventListener('click', () => {
+        openMercadoPagoCheckout(user.email);
+    });
+    
+    // Desabilitar input e botão após confirmação
+    document.getElementById('user-email').disabled = true;
+    document.getElementById('confirm-email-btn').style.display = 'none';
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+</script>
 	
 
 				<div class="scrollbar-custom flex flex-col gap-1 overflow-y-auto rounded-r-xl from-gray-50 px-3 pb-3 pt-2 text-[.9rem] dark:from-gray-800/30">
